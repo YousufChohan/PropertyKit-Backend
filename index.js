@@ -6,13 +6,14 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 require("./models/User");
-require('./models/Message');
+require("./models/Message");
 
+console.log("hi");
 const authRoutes = require("./routes/authRoutes");
 const uploadMedia = require("./routes/uploadMedia");
 const profile = require("./routes/profile");
 const search = require("./routes/search");
-const message = require('./routes/message');
+const message = require("./routes/message");
 
 mongoose.set("strictQuery", false);
 
@@ -20,7 +21,6 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 
 const httpServer = createServer();
-
 
 const io = new Server(httpServer, {});
 
@@ -35,23 +35,21 @@ app.get("/", (req, res) => {
   res.send("hello World");
 });
 
-
 io.on("connection", (socket) => {
-
   console.log("USER CONNECTED - ", socket.id);
 
   socket.on("disconnect", () => {
-      console.log("USER DISCONNECTED - ", socket.id);
+    console.log("USER DISCONNECTED - ", socket.id);
   });
 
   socket.on("join_room", (data) => {
-      console.log("USER WITH ID - ",socket.id,"JOIN ROOM - ", data.roomid);
-      socket.join(data);
+    console.log("USER WITH ID - ", socket.id, "JOIN ROOM - ", data.roomid);
+    socket.join(data);
   });
 
   socket.on("send_message", (data) => {
-      console.log("MESSAGE RECEIVED - ", data);
-      io.emit("receive_message", data);
+    console.log("MESSAGE RECEIVED - ", data);
+    io.emit("receive_message", data);
   });
 });
 
